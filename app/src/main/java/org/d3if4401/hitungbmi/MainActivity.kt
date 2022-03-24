@@ -26,12 +26,12 @@ class MainActivity : AppCompatActivity() {
 //        val tinggi = binding.textView3.text.toString().toFloat() / 100
 //        val bmi = berat / (tinggi * tinggi)
 
-        val berat = binding.editTextTextPersonName.text.toString()
+        val berat = binding.beratBadanInp.text.toString()
         if (TextUtils.isEmpty(berat)) {
             Toast.makeText(this, R.string.berat_invalid, Toast.LENGTH_LONG).show()
             return
         }
-        val tinggi = binding.editTextTextPersonName2.text.toString()
+        val tinggi = binding.tinggiBadanInp.text.toString()
         if (TextUtils.isEmpty(tinggi)) {
             Toast.makeText(this, R.string.tinggi_invalid, Toast.LENGTH_LONG).show()
             return
