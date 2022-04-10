@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import org.d3if4401.hitungbmi.databinding.ActivityMainBinding
 import org.d3if4401.hitungbmi.model.HasilBmi
 import org.d3if4401.hitungbmi.model.KategoriBmi
@@ -11,6 +12,10 @@ import org.d3if4401.hitungbmi.model.KategoriBmi
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val result = hitungBmi(
+        val result = viewModel.hitungBmi(
             berat.toFloat(),
             tinggi.toFloat(),
             selectedId == R.id.priaRadioButton
