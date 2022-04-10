@@ -94,7 +94,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2">
 
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/priaRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -132,7 +132,7 @@
             app:layout_constraintTop_toBottomOf="@+id/button" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/bmiTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -143,7 +143,7 @@
             tools:text="BMI: 24,09" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/kategoriTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
