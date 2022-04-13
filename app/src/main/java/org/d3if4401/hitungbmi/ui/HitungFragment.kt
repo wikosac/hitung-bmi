@@ -2,14 +2,10 @@ package org.d3if4401.hitungbmi.ui
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import org.d3if4401.hitungbmi.R
 import org.d3if4401.hitungbmi.databinding.FragmentHitungBinding
@@ -24,9 +20,14 @@ class HitungFragment : Fragment() {
         ViewModelProvider(requireActivity())[HitungViewModel::class.java]
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
         binding = FragmentHitungBinding.inflate(layoutInflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -36,8 +37,13 @@ class HitungFragment : Fragment() {
         viewModel.getHasilBmi().observe(requireActivity(), { showResult(it) })
         viewModel.getNavigasi().observe(viewLifecycleOwner, {
             if (it == null) return@observe
-            findNavController().navigate(HitungFragmentDirections.actionHitungFragmentToSaranFragment(it))
-            viewModel.selesaiNavigasi() })
+            findNavController().navigate(
+                HitungFragmentDirections.actionHitungFragmentToSaranFragment(
+                    it
+                )
+            )
+            viewModel.selesaiNavigasi()
+        })
     }
 
     private fun hitungBmi() {
@@ -67,25 +73,9 @@ class HitungFragment : Fragment() {
     private fun showResult(result: HasilBmi?) {
         if (result == null) return
         binding.bmiTextView.text = getString(R.string.bmi_x, result.bmi)
-        binding.kategoriTextView.text = getString (R.string.kategori_x, getKategoriLabel(result.kategori))
+        binding.kategoriTextView.text =
+            getString(R.string.kategori_x, getKategoriLabel(result.kategori))
         binding.saranButton.visibility = View.VISIBLE
-    }
-
-    private fun getKategori(bmi: Float, isMale: Boolean): KategoriBmi {
-        val kategori = if (isMale) {
-            when {
-                bmi < 20.5 -> KategoriBmi.KURUS
-                bmi >= 27.0 -> KategoriBmi.GEMUK
-                else -> KategoriBmi.IDEAL
-            }
-        } else {
-            when {
-                bmi < 18.5 -> KategoriBmi.KURUS
-                bmi >= 25.0 -> KategoriBmi.GEMUK
-                else -> KategoriBmi.IDEAL
-            }
-        }
-        return kategori
     }
 
     private fun getKategoriLabel(kategori: KategoriBmi): String {
@@ -95,5 +85,18 @@ class HitungFragment : Fragment() {
             KategoriBmi.GEMUK -> R.string.gemuk
         }
         return getString(stringRes)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate (R.menu.options_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_about) {
+            findNavController().navigate(R.id.action_hitungFragment_to_aboutFragment)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
