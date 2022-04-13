@@ -1,5 +1,6 @@
 package org.d3if4401.hitungbmi.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -34,6 +35,7 @@ class HitungFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.button.setOnClickListener { hitungBmi() }
         binding.saranButton.setOnClickListener { viewModel.mulaiNavigasi() }
+        binding.shareButton.setOnClickListener { shareData() }
         viewModel.getHasilBmi().observe(requireActivity(), { showResult(it) })
         viewModel.getNavigasi().observe(viewLifecycleOwner, {
             if (it == null) return@observe
@@ -46,13 +48,34 @@ class HitungFragment : Fragment() {
         })
     }
 
+    private fun shareData() {
+        val selectedId = binding.radioGroup.checkedRadioButtonId
+        val gender = if (selectedId == R.id.priaRadioButton)
+            getString(R.string.pria)
+        else
+            getString(R.string.wanita)
+        val message = getString(
+            R.string.bagikan_template,
+            binding.beratEditText.text,
+            binding.tinggiEditText.text,
+            gender,
+            binding.bmiTextView.text,
+            binding.kategoriTextView.text
+        )
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.setType ("text/plain").putExtra(Intent.EXTRA_TEXT, message)
+        if (shareIntent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivity(shareIntent)
+        }
+    }
+
     private fun hitungBmi() {
-        val berat = binding.editTextTextPersonName.text.toString()
+        val berat = binding.beratEditText.text.toString()
         if (TextUtils.isEmpty(berat)) {
             Toast.makeText(context, R.string.berat_invalid, Toast.LENGTH_LONG).show()
             return
         }
-        val tinggi = binding.editTextTextPersonName2.text.toString()
+        val tinggi = binding.tinggiEditText.text.toString()
         if (TextUtils.isEmpty(tinggi)) {
             Toast.makeText(context, R.string.tinggi_invalid, Toast.LENGTH_LONG).show()
             return
@@ -75,7 +98,7 @@ class HitungFragment : Fragment() {
         binding.bmiTextView.text = getString(R.string.bmi_x, result.bmi)
         binding.kategoriTextView.text =
             getString(R.string.kategori_x, getKategoriLabel(result.kategori))
-        binding.saranButton.visibility = View.VISIBLE
+        binding.buttonGroup.visibility = View.VISIBLE
     }
 
     private fun getKategoriLabel(kategori: KategoriBmi): String {
@@ -89,7 +112,7 @@ class HitungFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate (R.menu.options_menu, menu)
+        inflater.inflate(R.menu.options_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
